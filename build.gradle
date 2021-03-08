@@ -2,16 +2,39 @@ plugins {
     id 'java'
 }
 
+compileJava.options.encoding('UTF-8')
+compileTestJava.options.encoding('UTF-8')
+
 group 'ospringo'
 version '0.0.1'
 
-repositories {
-    mavenCentral()
-}
+allprojects {
 
-dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'application'
+
+    sourceCompatibility = 1.8
+    compileJava.options.encoding = "UTF-8"
+    compileTestJava.options.encoding = "UTF-8"
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+        testCompile group: 'junit', name: 'junit', version: '4.12'
+        compile rootProject.files("lib/JFoenix.jar")
+    }
+
+    task setRes(type: Copy) {
+        from "${projectDir}/src/main/resources"
+        into "${buildDir}/classes/java/main"
+    }
+
+    processResources.dependsOn(setRes)
 }
 
 test {
