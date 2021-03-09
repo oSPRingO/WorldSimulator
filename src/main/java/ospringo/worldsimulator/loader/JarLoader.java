@@ -8,13 +8,13 @@ import java.util.jar.*;
 public class JarLoader {
 
     /**
-     * 加载JAR包并读出元数据
+     * 加载JAR包
      * @param jarPath JAR包位置
-     * @return 元数据及状态
+     * @return 状态
      * @throws IOException
      * @throws MalformedParameterizedTypeException
      */
-    public static Object[] loadJar(String jarPath) throws IOException, MalformedParameterizedTypeException {
+    public static boolean loadJar(String jarPath) throws IOException, MalformedParameterizedTypeException {
         // JAR文件存在状态
         File file = new File(jarPath);
         if (!file.exists()) {
@@ -25,8 +25,8 @@ public class JarLoader {
         Method method;
         try {
             method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
-        } catch (NoSuchMethodException | SecurityException e) {
-            return new Object[]{false, null};
+        } catch (Exception e) {
+            return false;
         }
 
         boolean accessible = method.isAccessible();
@@ -44,26 +44,11 @@ public class JarLoader {
 
             // 加载
             method.invoke(loader, url);
-
-            // 读加载类
-            JarFile jarFile = new JarFile(file);
-            is = jarFile.getInputStream(jarFile.getEntry("META-INF/plugin.json"));
-            while (true) {
-                byte[] r = new byte[1];
-                is.read(r);
-                loaderName.append(r[0]);
-            }
-        } catch (Exception e) {
-            if (is != null) {
-                return new Object[]{true, loaderName.toString()};
-            }
-        } finally {
-            if (is != null) {
-                is.close();
-            }
+            return true;
+        } catch (Exception ignore) { } finally {
             // 设回允许状态
             method.setAccessible(accessible);
         }
-        return new Object[]{false, null};
+        return false;
     }
 }
