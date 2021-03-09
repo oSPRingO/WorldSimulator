@@ -47,7 +47,7 @@ public class JarLoader {
 
             // 读加载类
             JarFile jarFile = new JarFile(file);
-            is = jarFile.getInputStream(jarFile.getEntry("META-INF/LOADER-NAME"));
+            is = jarFile.getInputStream(jarFile.getEntry("META-INF/plugin.json"));
             while (true) {
                 byte[] r = new byte[1];
                 is.read(r);
