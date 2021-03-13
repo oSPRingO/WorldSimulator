@@ -1,5 +1,8 @@
 package ospringo.worldsimulator.loader;
 
+/**
+ * 元数据
+ */
 public class Meta {
 
     private String name;

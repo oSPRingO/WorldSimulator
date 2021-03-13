@@ -8,6 +8,13 @@ import com.google.gson.Gson;
 
 public class JarLoader {
 
+    /**
+     * 加载附加包
+     * @param jarPath 文件位置
+     * @return 元数据
+     * @throws IOException
+     * @throws MalformedParameterizedTypeException
+     */
     public static Meta load(String jarPath) throws IOException, MalformedParameterizedTypeException {
         boolean result = loadJar(jarPath);
         if (result) {
