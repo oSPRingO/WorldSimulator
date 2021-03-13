@@ -4,8 +4,26 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.net.*;
 import java.util.jar.*;
+import com.google.gson.Gson;
 
 public class JarLoader {
+
+    public static Meta load(String jarPath) throws IOException, MalformedParameterizedTypeException {
+        boolean result = loadJar(jarPath);
+        if (result) {
+            JarFile file = new JarFile(jarPath);
+            JarEntry entry = (JarEntry) file.getEntry("META-INF/plugin.json");
+            InputStream in = file.getInputStream(entry);
+            byte[] b = new byte[Math.toIntExact(entry.getSize())];
+            in.read(b);
+            String s = new String(b);
+            Gson gson = new Gson();
+            Meta meta = gson.fromJson(s, Meta.class);
+            return meta;
+        } else {
+            return null;
+        }
+    }
 
     /**
      * 加载JAR包
@@ -14,7 +32,7 @@ public class JarLoader {
      * @throws IOException
      * @throws MalformedParameterizedTypeException
      */
-    public static boolean loadJar(String jarPath) throws IOException, MalformedParameterizedTypeException {
+    private static boolean loadJar(String jarPath) throws IOException, MalformedParameterizedTypeException {
         // JAR文件存在状态
         File file = new File(jarPath);
         if (!file.exists()) {
