@@ -52,11 +52,9 @@ public class RegistryTable {
     }
 
     public void register(IRegistrable registry, Map<String, Object> options) {
-        if (classes.contains(registry.register())) {
-            RegistryInstance instance = new RegistryInstance(registry);
-            instance.setOptions(options);
-            instances.add(instance);
-        }
+        RegistryInstance instance = new RegistryInstance(registry);
+        instance.setOptions(options);
+        instances.add(instance);
     }
 
     public void set(int index, Map<String, Object> options) {
@@ -75,6 +73,13 @@ public class RegistryTable {
             instance.setOptions(options);
             instances.set(index, instance);
         }
+    }
+
+    public Object get(int index, String name) {
+        if (instances.size() > index) {
+            return instances.get(index).getOption(name);
+        }
+        return null;
     }
 
     public RegistryInstance[] getInstances() {

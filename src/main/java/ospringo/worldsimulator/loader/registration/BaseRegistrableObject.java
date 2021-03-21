@@ -5,13 +5,16 @@ package ospringo.worldsimulator.loader.registration;
  */
 public class BaseRegistrableObject implements IRegistrable {
 
+    RegistryClass rc = new RegistryClass(this);
+    RegistryInstance instance = new RegistryInstance(this);
+
     @Override
     public RegistryClass register() {
-        return new RegistryClass(this);
+        return rc;
     }
 
     @Override
-    public RegistryInstance registerStack() {
-        return new RegistryInstance(this);
+    public RegistryInstance registerInstance() {
+        return instance;
     }
 }

@@ -7,5 +7,5 @@ public interface IRegistrable {
 
     RegistryClass register();
 
-    RegistryInstance registerStack();
+    RegistryInstance registerInstance();
 }
